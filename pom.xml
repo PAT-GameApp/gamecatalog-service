@@ -11,9 +11,9 @@
 		<!--  lookup parent from repository  -->
 	</parent>
 	<groupId>com.cognizant</groupId>
-	<artifactId>Game_Catalog</artifactId>
+	<artifactId>game-catalog-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Game_Catalog</name>
+	<name>game-catalog-service</name>
 	<description>Game catalog project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
