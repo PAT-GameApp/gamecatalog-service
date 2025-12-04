@@ -63,6 +63,11 @@ public class Game_Catalog_Controller {
         return ResponseEntity.status(HttpStatus.OK).body("Game deleted");
     }
 
+    @GetMapping("/locations")
+    public ResponseEntity<List<String>> getLocations() {
+        return ResponseEntity.ok(gameCatalogService.getLocations());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
