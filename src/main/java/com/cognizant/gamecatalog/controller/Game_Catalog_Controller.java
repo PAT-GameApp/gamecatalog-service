@@ -25,18 +25,18 @@ public class Game_Catalog_Controller {
     @Autowired
     private Game_Catalog_Service gameCatalogService;
 
-    @PostMapping("/create_game")
+    @PostMapping
     public ResponseEntity<String> createGame(@Valid @RequestBody Game_Catalog_Entity game) {
         gameCatalogService.createGame(game);
         return ResponseEntity.status(HttpStatus.CREATED).body("Game created");
     }
 
-    @GetMapping("/get_all_games")
+    @GetMapping
     public ResponseEntity<List<Game_Catalog_Entity>> getAllGames() {
         return ResponseEntity.ok(gameCatalogService.getAllGames());
     }
 
-    @GetMapping("/get_game_by_id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Game_Catalog_Entity> getGameById(@PathVariable Long id) {
         Game_Catalog_Entity game = gameCatalogService.getGameById(id);
         if (game != null) {
@@ -46,8 +46,9 @@ public class Game_Catalog_Controller {
         }
     }
 
-    @PutMapping("/update_game/{id}")
-    public ResponseEntity<Game_Catalog_Entity> updateGame(@PathVariable Long id, @Valid @RequestBody Game_Catalog_Entity game) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Game_Catalog_Entity> updateGame(@PathVariable Long id,
+            @Valid @RequestBody Game_Catalog_Entity game) {
         Game_Catalog_Entity updated = gameCatalogService.updateGame(id, game);
         if (updated != null) {
             return ResponseEntity.ok(updated);
@@ -56,7 +57,7 @@ public class Game_Catalog_Controller {
         }
     }
 
-    @DeleteMapping("/delete_game/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGame(@PathVariable Long id) {
         gameCatalogService.deleteGame(id);
         return ResponseEntity.status(HttpStatus.OK).body("Game deleted");
