@@ -10,4 +10,7 @@ public interface Game_Catalog_Repository extends JpaRepository<Game_Catalog_Enti
 
 	@Query("SELECT DISTINCT g.game_locations FROM Game_Catalog_Entity g WHERE g.game_locations IS NOT NULL ORDER BY g.game_locations")
 	List<String> getLocations();
+
+	@Query("SELECT g FROM Game_Catalog_Entity g WHERE g.game_locations = :gameLocations")
+	List<Game_Catalog_Entity> findByGameLocations(String gameLocations);
 }

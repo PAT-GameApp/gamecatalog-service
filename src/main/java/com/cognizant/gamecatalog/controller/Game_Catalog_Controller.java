@@ -70,6 +70,11 @@ public class Game_Catalog_Controller {
         return ResponseEntity.ok(gameCatalogService.getLocations());
     }
 
+    @GetMapping("/locations/{location}")
+    public ResponseEntity<List<Game_Catalog_Entity>> getGamesByLocation(@PathVariable String location) {
+        return ResponseEntity.ok(gameCatalogService.getGamesByLocation(location));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());

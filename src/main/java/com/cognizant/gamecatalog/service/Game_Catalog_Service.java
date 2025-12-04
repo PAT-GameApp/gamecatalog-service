@@ -41,4 +41,8 @@ public class Game_Catalog_Service {
         return gameCatalogRepository.getLocations();
     }
 
+    public List<Game_Catalog_Entity> getGamesByLocation(String location) {
+        return gameCatalogRepository.findByGameLocations(location);
+    }
+
 }
