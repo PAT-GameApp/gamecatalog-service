@@ -1,33 +1,33 @@
 package com.cognizant.gamecatalog.service;
 
-import com.cognizant.gamecatalog.entity.Game_Catalog_Entity;
-import com.cognizant.gamecatalog.repository.Game_Catalog_Repository;
+import com.cognizant.gamecatalog.entity.Game;
+import com.cognizant.gamecatalog.service.GameCatalogService;
+import com.cognizant.gamecatalog.repository.GameCatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Game_Catalog_Service {
+public class GameCatalogService {
     @Autowired
-    private Game_Catalog_Repository gameCatalogRepository;
+    private GameCatalogRepository gameCatalogRepository;
 
-    public Game_Catalog_Entity createGame(Game_Catalog_Entity game) {
+    public Game createGame(Game game) {
         return gameCatalogRepository.save(game);
     }
 
-    public List<Game_Catalog_Entity> getAllGames() {
+    public List<Game> getAllGames() {
         return gameCatalogRepository.findAll();
     }
 
-    public Game_Catalog_Entity getGameById(Long id) {
-        Optional<Game_Catalog_Entity> game = gameCatalogRepository.findById(id);
+    public Game getGameById(Long id) {
+        Optional<Game> game = gameCatalogRepository.findById(id);
         return game.orElse(null);
     }
 
-    public Game_Catalog_Entity updateGame(Long id, Game_Catalog_Entity updatedGame) {
+    public Game updateGame(Long id, Game updatedGame) {
         if (gameCatalogRepository.existsById(id)) {
-            updatedGame.setGame_id(id);
             return gameCatalogRepository.save(updatedGame);
         }
         return null;
@@ -41,8 +41,7 @@ public class Game_Catalog_Service {
         return gameCatalogRepository.getLocations();
     }
 
-    public List<Game_Catalog_Entity> getGamesByLocation(String location) {
+    public List<Game> getGamesByLocation(String location) {
         return gameCatalogRepository.findByGameLocations(location);
     }
-
 }

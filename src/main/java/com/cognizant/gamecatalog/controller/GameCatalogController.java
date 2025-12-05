@@ -16,31 +16,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cognizant.gamecatalog.entity.Game_Catalog_Entity;
-import com.cognizant.gamecatalog.service.Game_Catalog_Service;
+import com.cognizant.gamecatalog.entity.Game;
+import com.cognizant.gamecatalog.service.GameCatalogService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/games")
 @CrossOrigin(origins = "http://localhost:5173")
-public class Game_Catalog_Controller {
+public class GameCatalogController {
     @Autowired
-    private Game_Catalog_Service gameCatalogService;
+    private GameCatalogService gameCatalogService;
 
-    @PostMapping
-    public ResponseEntity<String> createGame(@Valid @RequestBody Game_Catalog_Entity game) {
+    @PostMapping("/create_game")
+    public ResponseEntity<String> createGame(@Valid @RequestBody Game game) {
         gameCatalogService.createGame(game);
         return ResponseEntity.status(HttpStatus.CREATED).body("Game created");
     }
 
-    @GetMapping
-    public ResponseEntity<List<Game_Catalog_Entity>> getAllGames() {
+    @GetMapping("/get_all_games")
+    public ResponseEntity<List<Game>> getAllGames() {
         return ResponseEntity.ok(gameCatalogService.getAllGames());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Game_Catalog_Entity> getGameById(@PathVariable Long id) {
-        Game_Catalog_Entity game = gameCatalogService.getGameById(id);
+    @GetMapping("/get_game_by_id/{id}")
+    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+        Game game = gameCatalogService.getGameById(id);
         if (game != null) {
             return ResponseEntity.ok(game);
         } else {
@@ -48,10 +48,9 @@ public class Game_Catalog_Controller {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Game_Catalog_Entity> updateGame(@PathVariable Long id,
-            @Valid @RequestBody Game_Catalog_Entity game) {
-        Game_Catalog_Entity updated = gameCatalogService.updateGame(id, game);
+    @PutMapping("/update_game/{id}")
+    public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody Game game) {
+        Game updated = gameCatalogService.updateGame(id, game);
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {
@@ -71,7 +70,7 @@ public class Game_Catalog_Controller {
     }
 
     @GetMapping("/locations/{location}")
-    public ResponseEntity<List<Game_Catalog_Entity>> getGamesByLocation(@PathVariable String location) {
+    public ResponseEntity<List<Game>> getGamesByLocation(@PathVariable String location) {
         return ResponseEntity.ok(gameCatalogService.getGamesByLocation(location));
     }
 

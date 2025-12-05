@@ -1,42 +1,42 @@
 package com.cognizant.gamecatalog.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "game_catalog")
 @EntityListeners(AuditingEntityListener.class)
-public class Game_Catalog_Entity {
+@Builder
+public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id")
-    private Long game_id;
+    private Long gameId;
 
-    @NotBlank(message = "Game name is required")
-    @Column(name = "game_name", nullable = false)
-    private String game_name;
+    @NotNull(message = "Game name cannot be empty")
+    private String gameName;
 
-    @Column(name = "game_locations")
-    private String game_locations;
+    private String gameInfo;
+
+    @NotNull(message = "Game location cannot be empty")
+    private String gameLocation;
+
+    private String gameFloor;
 
     @NotNull(message = "Number of players is required")
     @Positive(message = "Number of players must be positive")
-    @Column(name = "game_num_players")
-    private Integer game_numPlayers;
+    private Integer numberOfPlayers;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime created_at;
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "modified_at")
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 }
