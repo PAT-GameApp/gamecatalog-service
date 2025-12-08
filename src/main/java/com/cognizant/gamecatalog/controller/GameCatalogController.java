@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,23 +21,22 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/games")
-@CrossOrigin(origins = "http://localhost:5173")
 public class GameCatalogController {
     @Autowired
     private GameCatalogService gameCatalogService;
 
-    @PostMapping("/create_game")
+    @PostMapping("/")
     public ResponseEntity<String> createGame(@Valid @RequestBody Game game) {
         gameCatalogService.createGame(game);
         return ResponseEntity.status(HttpStatus.CREATED).body("Game created");
     }
 
-    @GetMapping("/get_all_games")
+    @GetMapping("/")
     public ResponseEntity<List<Game>> getAllGames() {
         return ResponseEntity.ok(gameCatalogService.getAllGames());
     }
 
-    @GetMapping("/get_game_by_id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Game> getGameById(@PathVariable Long id) {
         Game game = gameCatalogService.getGameById(id);
         if (game != null) {
@@ -48,7 +46,7 @@ public class GameCatalogController {
         }
     }
 
-    @PutMapping("/update_game/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody Game game) {
         Game updated = gameCatalogService.updateGame(id, game);
         if (updated != null) {

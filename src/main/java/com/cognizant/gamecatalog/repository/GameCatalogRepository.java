@@ -10,9 +10,9 @@ import java.util.List;
 public interface GameCatalogRepository extends JpaRepository<Game, Long> {
     // You can add custom query methods here if needed
 
-    @Query("SELECT DISTINCT g.game_locations FROM Game g WHERE g.game_locations IS NOT NULL ORDER BY g.game_locations")
+    @Query("SELECT DISTINCT g.gameLocation FROM Game g WHERE g.gameLocation IS NOT NULL ORDER BY g.gameLocation")
     List<String> getLocations();
 
-    @Query("SELECT g FROM Game g WHERE g.game_locations = :gameLocations")
+    @Query("SELECT g FROM Game g WHERE g.gameLocation = :gameLocations")
     List<Game> findByGameLocations(String gameLocations);
 }
