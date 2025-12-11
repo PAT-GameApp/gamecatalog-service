@@ -29,8 +29,9 @@ public class Game {
 
     private String gameInfo;
 
-    @NotNull(message = "Game location cannot be empty")
-    private String gameLocation;
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     private String gameFloor;
 

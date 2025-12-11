@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cognizant.gamecatalog.entity.Game;
+import com.cognizant.gamecatalog.dto.GameRequest;
+import com.cognizant.gamecatalog.dto.GameResponse;
 import com.cognizant.gamecatalog.service.GameCatalogService;
 import jakarta.validation.Valid;
 
@@ -26,19 +27,19 @@ public class GameCatalogController {
     private GameCatalogService gameCatalogService;
 
     @PostMapping("/")
-    public ResponseEntity<String> createGame(@Valid @RequestBody Game game) {
-        gameCatalogService.createGame(game);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Game created");
+    public ResponseEntity<GameResponse> createGame(@Valid @RequestBody GameRequest gameRequest) {
+        GameResponse createdGame = gameCatalogService.createGame(gameRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdGame);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Game>> getAllGames() {
+    public ResponseEntity<List<GameResponse>> getAllGames() {
         return ResponseEntity.ok(gameCatalogService.getAllGames());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
-        Game game = gameCatalogService.getGameById(id);
+    public ResponseEntity<GameResponse> getGameById(@PathVariable Long id) {
+        GameResponse game = gameCatalogService.getGameById(id);
         if (game != null) {
             return ResponseEntity.ok(game);
         } else {
@@ -47,8 +48,8 @@ public class GameCatalogController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody Game game) {
-        Game updated = gameCatalogService.updateGame(id, game);
+    public ResponseEntity<GameResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequest gameRequest) {
+        GameResponse updated = gameCatalogService.updateGame(id, gameRequest);
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {
@@ -62,13 +63,10 @@ public class GameCatalogController {
         return ResponseEntity.status(HttpStatus.OK).body("Game deleted");
     }
 
-    @GetMapping("/locations")
-    public ResponseEntity<List<String>> getLocations() {
-        return ResponseEntity.ok(gameCatalogService.getLocations());
-    }
+    // Locations endpoint moved to LocationController
 
     @GetMapping("/locations/{location}")
-    public ResponseEntity<List<Game>> getGamesByLocation(@PathVariable String location) {
+    public ResponseEntity<List<GameResponse>> getGamesByLocation(@PathVariable String location) {
         return ResponseEntity.ok(gameCatalogService.getGamesByLocation(location));
     }
 

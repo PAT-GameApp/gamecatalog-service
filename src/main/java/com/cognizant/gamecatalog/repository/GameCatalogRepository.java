@@ -8,11 +8,9 @@ import com.cognizant.gamecatalog.entity.Game;
 import java.util.List;
 
 public interface GameCatalogRepository extends JpaRepository<Game, Long> {
-    // You can add custom query methods here if needed
+    // Custom query methods can be added here
 
-    @Query("SELECT DISTINCT g.gameLocation FROM Game g WHERE g.gameLocation IS NOT NULL ORDER BY g.gameLocation")
-    List<String> getLocations();
-
-    @Query("SELECT g FROM Game g WHERE g.gameLocation = :gameLocations")
-    List<Game> findByGameLocations(String gameLocations);
+    // Example: Find games by location city
+    @Query("SELECT g FROM Game g WHERE g.location.city = :city")
+    List<Game> findByLocationCity(String city);
 }
