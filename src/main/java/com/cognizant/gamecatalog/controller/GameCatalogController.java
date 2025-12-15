@@ -65,9 +65,9 @@ public class GameCatalogController {
 
     // Locations endpoint moved to LocationController
 
-    @GetMapping("/locations/{location}")
-    public ResponseEntity<List<GameResponse>> getGamesByLocation(@PathVariable String location) {
-        return ResponseEntity.ok(gameCatalogService.getGamesByLocation(location));
+    @GetMapping("/locations/{locationId}")
+    public ResponseEntity<List<GameResponse>> getGamesByLocation(@PathVariable Long locationId) {
+        return ResponseEntity.ok(gameCatalogService.getGamesByLocation(locationId));
     }
 
     @ExceptionHandler(Exception.class)

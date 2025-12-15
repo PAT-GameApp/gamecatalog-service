@@ -69,8 +69,8 @@ public class GameCatalogService {
         gameCatalogRepository.deleteById(id);
     }
 
-    public List<GameResponse> getGamesByLocation(String city) {
-        return gameCatalogRepository.findByLocationCity(city).stream()
+    public List<GameResponse> getGamesByLocation(Long locationId) {
+        return gameCatalogRepository.findByLocationLocationId(locationId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }

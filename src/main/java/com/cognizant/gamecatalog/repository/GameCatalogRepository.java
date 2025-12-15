@@ -11,6 +11,7 @@ public interface GameCatalogRepository extends JpaRepository<Game, Long> {
     // Custom query methods can be added here
 
     // Example: Find games by location city
-    @Query("SELECT g FROM Game g WHERE g.location.city = :city")
-    List<Game> findByLocationCity(String city);
+    // Example: Find games by location id
+    @Query("SELECT g FROM Game g WHERE g.location.locationId = :locationId")
+    List<Game> findByLocationLocationId(Long locationId);
 }

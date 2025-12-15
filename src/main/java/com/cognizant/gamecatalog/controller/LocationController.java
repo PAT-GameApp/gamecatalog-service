@@ -27,7 +27,7 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<LocationResponse>> getAllLocations() {
         return ResponseEntity.ok(locationService.getAllLocations());
     }
@@ -42,7 +42,7 @@ public class LocationController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<LocationResponse> createLocation(@Valid @RequestBody LocationRequest request) {
         LocationResponse created = locationService.createLocation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
