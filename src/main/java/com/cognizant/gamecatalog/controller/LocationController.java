@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +33,21 @@ public class LocationController {
     private LocationService locationService;
 
     @GetMapping("/")
-    public ResponseEntity<List<LocationResponse>> getAllLocations() {
-        return ResponseEntity.ok(locationService.getAllLocations());
+    public ResponseEntity<List<LocationResponse>> getAllLocations(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String direction) {
+        List<String> allowedSort = java.util.Arrays.asList("locationId", "country", "city", "office");
+        Pageable pageable = com.cognizant.gamecatalog.util.PagingUtil.buildPageable(page, size, sort, direction, allowedSort);
+        if (pageable != null) {
+            Page<LocationResponse> p = locationService.getAllLocations(pageable);
+            HttpHeaders headers = com.cognizant.gamecatalog.util.PagingUtil.buildHeaders(p);
+            List<LocationResponse> body = p.getContent();
+            return ResponseEntity.ok().headers(headers).body(body);
+        }
+        Sort sortSpec = com.cognizant.gamecatalog.util.PagingUtil.buildSort(sort, direction, allowedSort);
+        return ResponseEntity.ok(locationService.getAllLocations(sortSpec));
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.cognizant.gamecatalog.dto.LocationRequest;
@@ -33,6 +36,16 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    public Page<LocationResponse> getAllLocations(Pageable pageable) {
+        return locationRepository.findAll(pageable).map(this::mapToResponse);
+    }
+
+    public List<LocationResponse> getAllLocations(Sort sort) {
+        List<Location> list = sort == null || sort.isUnsorted() ? locationRepository.findAll()
+                : locationRepository.findAll(sort);
+        return list.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public LocationResponse getLocationById(Long id) {
         return locationRepository.findById(id)
                 .map(this::mapToResponse)
@@ -56,7 +69,7 @@ public class LocationService {
         locationRepository.deleteById(id);
     }
 
-    private LocationResponse mapToResponse(Location location) {
+    public LocationResponse mapToResponse(Location location) {
         return LocationResponse.builder()
                 .locationId(location.getLocationId())
                 .country(location.getCountry())

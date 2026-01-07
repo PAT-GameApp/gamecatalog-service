@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +38,21 @@ public class GameCatalogController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<GameResponse>> getAllGames() {
-        return ResponseEntity.ok(gameCatalogService.getAllGames());
+    public ResponseEntity<List<GameResponse>> getAllGames(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String direction) {
+        List<String> allowedSort = java.util.Arrays.asList("gameId", "gameName", "gameFloor", "numberOfPlayers", "createdAt", "modifiedAt");
+        Pageable pageable = com.cognizant.gamecatalog.util.PagingUtil.buildPageable(page, size, sort, direction, allowedSort);
+        if (pageable != null) {
+            Page<GameResponse> p = gameCatalogService.getAllGames(pageable);
+            HttpHeaders headers = com.cognizant.gamecatalog.util.PagingUtil.buildHeaders(p);
+            List<GameResponse> body = p.getContent();
+            return ResponseEntity.ok().headers(headers).body(body);
+        }
+        Sort sortSpec = com.cognizant.gamecatalog.util.PagingUtil.buildSort(sort, direction, allowedSort);
+        return ResponseEntity.ok(gameCatalogService.getAllGames(sortSpec));
     }
 
     @GetMapping("/{id}")
@@ -66,8 +84,21 @@ public class GameCatalogController {
     // Locations endpoint moved to LocationController
 
     @GetMapping("/locations/{locationId}")
-    public ResponseEntity<List<GameResponse>> getGamesByLocation(@PathVariable Long locationId) {
-        return ResponseEntity.ok(gameCatalogService.getGamesByLocation(locationId));
+    public ResponseEntity<List<GameResponse>> getGamesByLocation(@PathVariable Long locationId,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String direction) {
+        List<String> allowedSort = java.util.Arrays.asList("gameId", "gameName", "gameFloor", "numberOfPlayers", "createdAt", "modifiedAt");
+        Pageable pageable = com.cognizant.gamecatalog.util.PagingUtil.buildPageable(page, size, sort, direction, allowedSort);
+        if (pageable != null) {
+            Page<GameResponse> p = gameCatalogService.getGamesByLocation(locationId, pageable);
+            HttpHeaders headers = com.cognizant.gamecatalog.util.PagingUtil.buildHeaders(p);
+            List<GameResponse> body = p.getContent();
+            return ResponseEntity.ok().headers(headers).body(body);
+        }
+        Sort sortSpec = com.cognizant.gamecatalog.util.PagingUtil.buildSort(sort, direction, allowedSort);
+        return ResponseEntity.ok(gameCatalogService.getGamesByLocation(locationId, sortSpec));
     }
 
     @ExceptionHandler(Exception.class)

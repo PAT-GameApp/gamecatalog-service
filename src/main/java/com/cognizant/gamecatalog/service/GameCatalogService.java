@@ -7,6 +7,9 @@ import com.cognizant.gamecatalog.entity.Game;
 import com.cognizant.gamecatalog.entity.Location;
 import com.cognizant.gamecatalog.repository.GameCatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +47,16 @@ public class GameCatalogService {
                 .collect(Collectors.toList());
     }
 
+    public Page<GameResponse> getAllGames(Pageable pageable) {
+        return gameCatalogRepository.findAll(pageable).map(this::mapToResponse);
+    }
+
+    public List<GameResponse> getAllGames(Sort sort) {
+        List<Game> list = sort == null || sort.isUnsorted() ? gameCatalogRepository.findAll()
+                : gameCatalogRepository.findAll(sort);
+        return list.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public GameResponse getGameById(Long id) {
         return gameCatalogRepository.findById(id)
                 .map(this::mapToResponse)
@@ -75,7 +88,18 @@ public class GameCatalogService {
                 .collect(Collectors.toList());
     }
 
-    private GameResponse mapToResponse(Game game) {
+    public Page<GameResponse> getGamesByLocation(Long locationId, Pageable pageable) {
+        return gameCatalogRepository.findByLocationLocationId(locationId, pageable).map(this::mapToResponse);
+    }
+
+    public List<GameResponse> getGamesByLocation(Long locationId, Sort sort) {
+        List<Game> list = sort == null || sort.isUnsorted()
+                ? gameCatalogRepository.findByLocationLocationId(locationId)
+                : gameCatalogRepository.findByLocationLocationId(locationId, sort);
+        return list.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    public GameResponse mapToResponse(Game game) {
         return GameResponse.builder()
                 .gameId(game.getGameId())
                 .gameName(game.getGameName())
@@ -88,7 +112,7 @@ public class GameCatalogService {
                 .build();
     }
 
-    private LocationResponse mapLocationToResponse(Location location) {
+    public LocationResponse mapLocationToResponse(Location location) {
         if (location == null)
             return null;
         return LocationResponse.builder()
